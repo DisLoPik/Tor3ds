@@ -1,5 +1,7 @@
 # Tor3DS Interactive Bridge 🧅
 
+Demo: https://youtu.be/ei6YDzFaDiQ
+
 A thin-client Tor browser architecture for the Nintendo 3DS. 
 
 Because the Nintendo 3DS lacks the CPU power and RAM to natively handle modern HTML5/CSS3 rendering and Tor's heavy cryptographic routing, this project bypasses those hardware limitations entirely. 
