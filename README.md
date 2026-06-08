@@ -29,6 +29,7 @@ The server must be running on a PC connected to the same local Wi-Fi network as 
 3. Install the required Python libraries:
    ```
    pip install -r requirements.txt
+   playwright install
    ```
 
 ### Running the Server
