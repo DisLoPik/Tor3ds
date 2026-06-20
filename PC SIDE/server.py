@@ -16,7 +16,7 @@ import threading
 
 app = Flask(__name__)
 
-# ── Config 
+# Config 
 TOR_SOCKS_PORT = 9150 # default for Tor Browser
 SERVER_PORT    = 5000
 TOR_PROXY      = f"socks5://127.0.0.1:{TOR_SOCKS_PORT}"
@@ -26,7 +26,7 @@ request_log = []
 log_lock    = threading.Lock()
 start_time  = datetime.datetime.now()
 
-# ── Helpers 
+# Helpers 
 def log_request(url: str, status: str, note: str = ""):
     entry = {
         "time":   datetime.datetime.now().strftime("%H:%M:%S"),
@@ -59,7 +59,7 @@ def get_local_ip():
     except Exception:
         return "127.0.0.1"
 
-# ── Routes 
+# Routes 
 @app.route("/")
 def dashboard():
     """Human-readable status dashboard."""
@@ -141,7 +141,7 @@ def fetch_links():
         log_request(url, "FAIL", f"Links failed: {str(e)}")
         return str(e), 500
 
-# ── Dashboard HTML 
+# Dashboard HTML 
 DASHBOARD_HTML = """<!DOCTYPE html>
 <html>
 <head>
@@ -169,7 +169,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
 </style>
 </head>
 <body>
-<h1>🧅 Tor3DS Bridge Engine</h1>
+<h1>Tor3DS Bridge Engine</h1>
 <div class="grid">
   <div class="card">
     <div class="label">Tor Status</div>
@@ -219,11 +219,11 @@ DASHBOARD_HTML = """<!DOCTYPE html>
 </body>
 </html>"""
 
-# ── Entry point 
+# Entry point 
 if __name__ == "__main__":
     local_ip = get_local_ip()
     print("=" * 50)
-    print("  🧅  Tor3DS Headless Bridge Server")
+    print("Tor3DS Headless Bridge Server")
     print("=" * 50)
     print(f"  Dashboard Open: http://localhost:{SERVER_PORT}/")
     print(f"  3DS Target IP : {local_ip}")
