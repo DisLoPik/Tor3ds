@@ -20,36 +20,36 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-// --- Screen Size Constants ---
+
 #define TOP_WIDTH      400
 #define TOP_HEIGHT     240
 #define BOTTOM_WIDTH   320
 #define BOTTOM_HEIGHT  240
 
-// --- Global UI State ---
+
 char pc_ip[64] = "192.168.1.100"; // Generic fallback IP
 char current_url[256] = "duckduckgo.com";
 int scroll_y = 0; 
 int is_loading = 0;
 char status_message[128] = "Ready to browse.";
 
-// --- Text Buffers ---
+
 C2D_TextBuf dynamic_text_buf;
 
-// --- Link Map Data ---
+
 #define MAX_LINKS 200
 typedef struct { int x, y, w, h; char url[256]; } LinkMap;
 LinkMap page_links[MAX_LINKS];
 int link_count = 0;
 
-// --- Texture Memory ---
+
 C3D_Tex page_tex;
 Tex3DS_SubTexture page_subtex;
 C2D_Image page_img;
 
-// ==========================================
+
 // CONFIGURATION LOADING
-// ==========================================
+
 void load_config(void) {
     // Attempt to open the config file on the SD card
     FILE* file = fopen("sdmc:/3ds/Tor3DS/config.txt", "r");
@@ -66,9 +66,8 @@ void load_config(void) {
     }
 }
 
-// ==========================================
 // UTILITY: TEXT RENDERING
-// ==========================================
+
 void draw_string(C2D_TextBuf buf, float x, float y, float scale, u32 color, const char* fmt, ...) {
     char text_space[256];
     va_list args;
@@ -82,9 +81,9 @@ void draw_string(C2D_TextBuf buf, float x, float y, float scale, u32 color, cons
     C2D_DrawText(&text_obj, C2D_WithColor, x, y, 0.5f, scale, scale, color);
 }
 
-// ==========================================
+
 // THE MORTON SWIZZLER 
-// ==========================================
+
 u32 morton_interleave(u32 x, u32 y) {
     u32 i = (x & 7) | ((y & 7) << 8);
     i = (i ^ (i << 2)) & 0x1313;
@@ -110,9 +109,9 @@ void load_image_to_texture(u8* linear_data, int img_w, int img_h) {
     }
 }
 
-// ==========================================
+
 // NETWORK FETCHERS
-// ==========================================
+
 Result fetch_file(const char* endpoint, char* buffer, u32 buffer_size, u32* bytes_read) {
     httpcContext context;
     char request_url[512];
@@ -177,9 +176,9 @@ void load_page() {
     is_loading = 0;
 }
 
-// ==========================================
+
 // MAIN LOOP
-// ==========================================
+
 int main(int argc, char **argv) {
     gfxInitDefault();
     httpcInit(0);
@@ -219,11 +218,11 @@ int main(int argc, char **argv) {
 
         C2D_TextBufClear(dynamic_text_buf);
 
-        // --- Hardware Scrolling ---
+
         if (kHeld & KEY_DDOWN && scroll_y < (1024 - 145)) scroll_y += 5;
         if (kHeld & KEY_DUP && scroll_y > 0) scroll_y -= 5;
 
-        // --- Touch Inputs ---
+
         if (kDown & KEY_TOUCH && !is_loading) {
             int tx = touch.px;
             int ty = touch.py;
@@ -255,17 +254,17 @@ int main(int argc, char **argv) {
             }
         }
 
-        // --- RENDER PIPELINE ---
+
         C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 
-        // --- TOP SCREEN ---
+        // TOP SCREEN
         C2D_TargetClear(top_target, clr_bg);
         C2D_SceneBegin(top_target);
         C2D_DrawRectSolid(0, 0, 0.1f, TOP_WIDTH, TOP_HEIGHT, clr_dark_bar);
         draw_string(dynamic_text_buf, 20, 200, 0.60f, clr_text_w, "Tor3DS Interactive Bridge");
         draw_string(dynamic_text_buf, 20, 220, 0.50f, clr_text_w, "%s", status_message);
 
-        // --- BOTTOM SCREEN ---
+        // BOTTOM SCREEN
         C2D_TargetClear(bottom_target, clr_bg);
         C2D_SceneBegin(bottom_target);
 
